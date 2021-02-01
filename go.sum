@@ -1,0 +1,8 @@
+github.com/AkvicorEdwards/arg v1.2.1 h1:MmY/VhJhCf3meQKnICXGMmydvKIRV4OG4u2+keel/Y0=
+github.com/AkvicorEdwards/arg v1.2.1/go.mod h1:OkUE0S93KQUxu7amvcJPWreQwsH5k2BJsHWxlPrjdRI=
+github.com/AkvicorEdwards/encrypt v1.0.0 h1:IMdfOIVgpd+1U/g/oMcF8mzbockPP/73dGj38cAxKmQ=
+github.com/AkvicorEdwards/encrypt v1.0.0/go.mod h1:Jqi4wTCBzjJwtm1v+1m+oivQGDdkiB9SRmuPxhNEYh0=
+github.com/AkvicorEdwards/press v1.0.1 h1:b3ktH6aENI/t2aVlXmwXz0sJxMgpDC5hAWx2cQzmVRQ=
+github.com/AkvicorEdwards/press v1.0.1/go.mod h1:2vPNdTcxbPAkTfAClACRgZHlwiXGCzdwNU5CRjGBVlE=
+github.com/AkvicorEdwards/util v1.2.0 h1:le8L5LoJJBeO7G57AFz/eGaIYYIfVKI1R+ZXXg77pKY=
+github.com/AkvicorEdwards/util v1.2.0/go.mod h1:VeXHTuSiR099K+O2+Bw8QFEpk7vQGs3TiVvf22oKKGg=
