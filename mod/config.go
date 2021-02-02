@@ -184,7 +184,7 @@ func Config(str []string) error {
 		return err
 	}
 	defer Close(target)
-	_, err = target.Write(head.Bytes())
+	err = head.Write(target)
 	if err != nil {
 		Println(err)
 		return err

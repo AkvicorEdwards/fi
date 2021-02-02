@@ -678,7 +678,13 @@ func (c *Head) Write(fi *os.File) error {
 	if err != nil {
 		return err
 	}
-	_, err = fi.Write(c.Bytes())
+	bs := c.Bytes()
+	_, err = fi.Write(bs)
+	if err != nil {
+		return err
+	}
+	bsh := util.SHA256Bytes(bs)
+	_, err = fi.Write(bsh[:])
 	if err != nil {
 		return err
 	}
@@ -798,6 +804,18 @@ func (c *Head) Read(fi *os.File) error {
 	}
 
 	c.ApplyFlagToEnc()
+
+	bsh := make([]byte, 32)
+	n, err = fi.Read(bsh)
+	if err != nil || n != 32 {
+		return ErrRead
+	}
+	bs := util.SHA256Bytes(c.Bytes())
+	for k, v := range bsh {
+		if bs[k] != v {
+			return ErrRead
+		}
+	}
 	return nil
 }
 
@@ -1119,6 +1137,5 @@ func (c *Head)ReadFromBytes(data []byte) (err error) {
 	}
 
 	c.ApplyFlagToEnc()
-
 	return nil
 }

@@ -12,6 +12,7 @@ import (
 tgz tar gz file
 	size = 1 [filename]
 	-o out file
+	-x extract
 	-t tar
 	-g gz
 	-tg tgz (default)
@@ -36,6 +37,14 @@ func AddTgz(order int) (err error) {
 	}
 	err = arg.AddOption([]string{"tgz", "-g"}, 30, 0, 10, "Gzip target file",
 		"Gzip target file", "", "", TgzArgG, nil)
+	if err != nil {
+		return err
+	}
+	err = arg.AddOption([]string{"tgz", "-x"}, 40, 0, 10, "Extract file",
+		"Extract file", "", "", TgzArgX, nil)
+	if err != nil {
+		return err
+	}
 	err = AddOptionDisplayLog([]string{"tgz"}, 60, 200)
 	if err != nil {
 		return err
@@ -47,6 +56,7 @@ var ErrTgzNotExist = errors.New("target not exist")
 
 var tgzVarTar = false
 var tgzVarGzip = false
+var tgzVarExtract = false
 var tgzVarTargetFile = ""
 
 func Tgz(str []string) (err error) {
@@ -60,6 +70,19 @@ func Tgz(str []string) (err error) {
 		tgzVarTar = true
 		tgzVarGzip = true
 	}
+	// Extract
+	if tgzVarExtract {
+		if tgzVarGzip && tgzVarTar {
+			err = press.UnTgz(originalFilename[0], "")
+		} else if tgzVarGzip {
+			err = press.UnGzip(originalFilename[0], "")
+		} else if tgzVarTar {
+			err = press.UnTar(originalFilename[0], "")
+		}
+		Println(err)
+		return err
+	}
+
 	if len(originalFilename) > 1 {
 		Println("The number of files is greater than 1")
 		tgzVarTar = true
@@ -111,5 +134,10 @@ func TgzArgT([]string) error {
 
 func TgzArgG([]string) error {
 	tgzVarGzip = true
+	return nil
+}
+
+func TgzArgX([]string) error {
+	tgzVarExtract = true
 	return nil
 }

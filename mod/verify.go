@@ -69,7 +69,7 @@ func Verify(str []string) error {
 		Println(err)
 		return err
 	}
-	L := int64(len(head.Bytes()))
+	L := int64(len(head.Bytes()) + 32)
 	wrongPassword := false
 	err = head.SetPassword([]byte(verifyVarPassword), false)
 	if err != nil {
