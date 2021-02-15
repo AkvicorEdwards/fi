@@ -18,7 +18,7 @@ verify verify file hash
 */
 
 func AddVerify(order int) (err error) {
-	err = arg.AddCommand([]string{"verify"}, order, 1, "Verify file",
+	err = arg.AddCommand([]string{"verify"}, order, -1, "Verify file",
 		"Verify file", "", "[filename]", Verify, nil)
 	if err != nil {
 		return err
@@ -55,19 +55,28 @@ func Verify(str []string) error {
 		verifyVarMD5 = true
 		verifyVarSHA256 = true
 	}
-	filename := str[1]
+	filename := str[1:]
+	for _, v := range filename {
+		verifySingleFile(v)
+	}
+
+	return nil
+}
+
+func verifySingleFile(filename string) {
 	file, err := os.Open(filename)
 	if err != nil {
+		fmt.Printf("[%s] Invalid File\n", filename)
 		Println(err)
-		return err
+		return
 	}
 	defer Close(file)
 	head := def.NewHead()
 	err = head.Read(file)
 	if err != nil {
-		fmt.Println("Invalid File")
+		fmt.Printf("[%s] Invalid File\n", filename)
 		Println(err)
-		return err
+		return
 	}
 	L := int64(len(head.Bytes()) + 32)
 	wrongPassword := false
@@ -102,14 +111,15 @@ func Verify(str []string) error {
 			}
 			result = "Pass"
 		}()
-		fmt.Printf("Verify MD5:    [%s]\n", result)
+		fmt.Printf("[%s] Verify MD5:    [%s]\n", filename, result)
 	}
 
 	if verifyVarSHA256 {
 		if verifyVarMD5 {
 			_, err = file.Seek(L, 0)
 			if err != nil {
-				return err
+				fmt.Printf("[%s] Invalid File\n", filename)
+				return
 			}
 		}
 		result := ""
@@ -137,10 +147,8 @@ func Verify(str []string) error {
 			}
 			result = "Pass"
 		}()
-		fmt.Printf("Verify SHA256: [%s]\n", result)
+		fmt.Printf("[%s] Verify SHA256: [%s]\n", filename, result)
 	}
-
-	return nil
 }
 
 func VerifyArgP(args []string) error {
